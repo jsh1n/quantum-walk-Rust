@@ -1,0 +1,8 @@
+[package]
+name = "eliptic"
+version = "0.1.0"
+authors = ["pj <pj.kyosyou@outlook.jp>"]
+
+[dependencies]
+gnuplot = "0.0.24"
+
