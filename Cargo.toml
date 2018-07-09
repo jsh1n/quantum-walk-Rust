@@ -5,4 +5,5 @@ authors = ["pj <pj.kyosyou@outlook.jp>"]
 
 [dependencies]
 gnuplot = "0.0.24"
-
+ndarray = "0.11.0"
+num = "*"
