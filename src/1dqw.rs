@@ -13,26 +13,33 @@ use num::complex::Complex;
 
 pub type State = Matrix2x1<Complex<f64>>;
 
+trait ToComplex {
+    fn to_complex(&self) -> Complex<f64>;
+}
+
+impl ToComplex for f64 {
+	fn to_complex(&self) -> Complex<f64> {
+		Complex{
+		re: *self,
+		im: 0.
+		}
+	}
+}
+
 fn main()
 {
 	// setting arguments
 	let theta: f64 = PI/4.;
 	const L: usize = 200;
-	fn to_complex(real: f64) -> Complex<f64> {
-		Complex{
-			re: real,
-			im: 0.
-		}
-	}
 
 	// preparing time development matrix
 	let p: Matrix2<Complex<f64>> = Matrix2::new(
-		to_complex(theta.cos()), to_complex(theta.sin()),
-		to_complex(0.) , to_complex(0.)
+		theta.cos().to_complex(), theta.sin().to_complex(),
+		0.0.to_complex() , 0.0.to_complex()
 	);
 	let q: Matrix2<Complex<f64>> = Matrix2::new(
-		to_complex(0.) , to_complex(0.) ,
-		to_complex(theta.sin()), to_complex(-theta.cos())
+		0.0.to_complex() , 0.0.to_complex() ,
+		theta.sin().to_complex(), -theta.cos().to_complex()
 	);
 	println!("P = {}, Q = {}", p, q);
 
@@ -47,7 +54,7 @@ fn main()
 			state_map.push(State::new(alpha, beta));
 			prob.push(1.);
 		} else {
-			state_map.push(State::new(Complex::new(0.,0.), Complex::new(0., 0.)));
+			state_map.push(State::new(0.0.to_complex(), 0.0.to_complex()));
 			prob.push(0.);
 		}
 	}
