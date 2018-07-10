@@ -32,14 +32,6 @@ fn main()
 	let theta: f64 = PI/4.;
 	const L: usize = 200;
 
-	// TODO: remove
-	fn to_complex(real: f64) -> Complex<f64> {
-		Complex{
-			re: real,
-			im: 0.
-		}
-	}
-
 	// preparing time development matrix
 	let p: Matrix2<Complex<f64>> = Matrix2::new(
 		theta.cos().to_complex(), theta.sin().to_complex(),
