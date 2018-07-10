@@ -17,7 +17,7 @@ pub type State = Matrix2x1<Complex<f64>>;
 fn main()
 {
 	// setting arguments
-	let theta: f64 = 12.*PI/12.;
+	let theta: f64 = 3.*PI/12.;
 	const L: usize = 200;
 	fn to_complex(real: f64) -> Complex<f64> {
 		Complex{
