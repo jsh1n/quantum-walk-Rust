@@ -73,8 +73,12 @@ fn main()
 		develop(&mut state_map, &mut prob, &P, &Q);
 		fg.clear_axes();
 		fg.axes2d()
-			.lines_points(0..2*L+1, &prob, &[
-                PointSymbol('r'),
+            .set_size(1.0, 1.0)
+		    .set_title("1dimensional quantum walk Simulation with Periodic boundary conditions", &[])
+            .set_x_label("Position", &[])
+		    .set_y_label("Probability", &[])
+			.set_y_range(Fix(0.), Fix(0.05))
+			.lines(0..2*L+1, &prob, &[
             ]);
 		fg.show();
 		sleep(Duration::from_millis(100));
