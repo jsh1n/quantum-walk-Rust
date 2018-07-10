@@ -19,3 +19,7 @@ path = "src/roundanime.rs"
 [[bin]]
 name = "1dqw"
 path = "src/1dqw.rs"
+
+[[bin]]
+name = "1dqw2"
+path = "src/1dqw2.rs"
