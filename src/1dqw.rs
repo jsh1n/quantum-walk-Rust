@@ -54,7 +54,7 @@ fn main()
 			state_map.push(State::new(alpha, beta));
 			prob.push(1.);
 		} else {
-			state_map.push(State::new(Complex::new(0.,0.), Complex::new(0., 0.)));
+			state_map.push(State::new(0.0.to_complex(), 0.0.to_complex()));
 			prob.push(0.);
 		}
 	}
