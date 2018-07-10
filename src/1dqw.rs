@@ -17,7 +17,7 @@ pub type State = Matrix2x1<Complex<f64>>;
 fn main()
 {
 	// setting arguments
-	let theta: f64 = 3.*PI/12.;
+	let theta: f64 = PI/4.;
 	const L: usize = 200;
 	fn to_complex(real: f64) -> Complex<f64> {
 		Complex{
@@ -53,33 +53,38 @@ fn main()
 		}
 	}
 
-	fn develop(state_map: &mut Vec<State>, prob: &mut Vec<f64>, P: &Matrix2<Complex<f64>>, Q: &Matrix2<Complex<f64>>) {
+	fn develop(state_map: &Vec<State>, P: &Matrix2<Complex<f64>>, Q: &Matrix2<Complex<f64>>)
+		-> (Vec<State>, Vec<f64>) {
+		let mut next_prob: Vec<f64> = vec![];
+		let mut next_map: Vec<State> = vec![];
 		for i in 0..2*L+1 {
 			if i == 0 {
-				state_map[i] = P*state_map[i+1];
+				next_map.push(P*state_map[i+1]);
 			} else if i == 2*L {
-				state_map[i] = Q*state_map[i-1];
+				next_map.push(Q*state_map[i-1]);
 			} else {
-				state_map[i] = P*state_map[i+1] + Q*state_map[i-1];
+				next_map.push(P*state_map[i+1] + Q*state_map[i-1]);
 			}
-			prob[i] = (state_map[i].conjugate_transpose()*state_map[i]).trace().re;
+			next_prob.push((next_map[i].conjugate_transpose()*next_map[i]).trace().re);
 		}
+		return (next_map, next_prob);
 	}
 
 	println!("This is an animation on quantum walk... Ctrl-C to quit.");
 	let mut fg = Figure::new();
 	loop
 	{
-		develop(&mut state_map, &mut prob, &P, &Q);
+		let (next_map, next_prob) = develop(&state_map, &P, &Q);
+		state_map = next_map;
+		prob = next_prob;
 		fg.clear_axes();
 		fg.axes2d()
-            .set_size(1.0, 1.0)
-		    .set_title("1dimensional quantum walk Simulation with Periodic boundary conditions", &[])
-            .set_x_label("Position", &[])
-		    .set_y_label("Probability", &[])
+			.set_size(1.0, 1.0)
+			.set_title("1dimensional quantum walk Simulation with Periodic boundary conditions", &[])
+			.set_x_label("Position", &[])
+			.set_y_label("Probability", &[])
 			.set_y_range(Fix(0.), Fix(0.05))
-			.lines(0..2*L+1, &prob, &[
-            ]);
+			.lines(0..2*L+1, &prob, &[]);
 		fg.show();
 		sleep(Duration::from_millis(100));
 	}
