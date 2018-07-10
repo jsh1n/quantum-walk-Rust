@@ -3,7 +3,6 @@ extern crate nalgebra as na;
 extern crate num;
 
 use gnuplot::*;
-use na::base::Matrix1;
 use na::base::Matrix2;
 use na::base::Matrix2x1;
 use std::thread::sleep;
@@ -27,15 +26,15 @@ fn main()
 	}
 
 	// preparing time development matrix
-	let P: Matrix2<Complex<f64>> = Matrix2::new(
+	let p: Matrix2<Complex<f64>> = Matrix2::new(
 		to_complex(theta.cos()), to_complex(theta.sin()),
 		to_complex(0.) , to_complex(0.)
 	);
-	let Q: Matrix2<Complex<f64>> = Matrix2::new(
+	let q: Matrix2<Complex<f64>> = Matrix2::new(
 		to_complex(0.) , to_complex(0.) ,
 		to_complex(theta.sin()), to_complex(-theta.cos())
 	);
-	println!("P = {}, Q = {}", P, Q);
+	println!("P = {}, Q = {}", p, q);
 
 	// prepareing State type and state map
 	let mut prob: Vec<f64> = vec![];
@@ -53,17 +52,17 @@ fn main()
 		}
 	}
 
-	fn develop(state_map: &Vec<State>, P: &Matrix2<Complex<f64>>, Q: &Matrix2<Complex<f64>>)
+	fn develop(state_map: &Vec<State>, p: &Matrix2<Complex<f64>>, q: &Matrix2<Complex<f64>>)
 		-> (Vec<State>, Vec<f64>) {
 		let mut next_prob: Vec<f64> = vec![];
 		let mut next_map: Vec<State> = vec![];
 		for i in 0..2*L+1 {
 			if i == 0 {
-				next_map.push(P*state_map[i+1]);
+				next_map.push(p*state_map[i+1]);
 			} else if i == 2*L {
-				next_map.push(Q*state_map[i-1]);
+				next_map.push(q*state_map[i-1]);
 			} else {
-				next_map.push(P*state_map[i+1] + Q*state_map[i-1]);
+				next_map.push(p*state_map[i+1] + q*state_map[i-1]);
 			}
 			next_prob.push((next_map[i].conjugate_transpose()*next_map[i]).trace().re);
 		}
@@ -74,7 +73,7 @@ fn main()
 	let mut fg = Figure::new();
 	loop
 	{
-		let (next_map, next_prob) = develop(&state_map, &P, &Q);
+		let (next_map, next_prob) = develop(&state_map, &p, &q);
 		state_map = next_map;
 		prob = next_prob;
 		fg.clear_axes();
@@ -86,6 +85,6 @@ fn main()
 			.set_y_range(Fix(0.), Fix(0.1))
 			.lines(0..2*L+1, &prob, &[]);
 		fg.show();
-		sleep(Duration::from_millis(100));
+		sleep(Duration::from_millis(50));
 	}
 }
