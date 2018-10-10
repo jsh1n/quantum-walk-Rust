@@ -1,4 +1,2 @@
 # Quantum Computation Simulation By Rust
-Rustにより量子計算のシミュレーションや量子ウォークの実装をするためのRepositoryです
-
-所有権等々がつらすぎてあんまかけてません
+Rustにより量子ウォークの実装をするためのRepositoryで
